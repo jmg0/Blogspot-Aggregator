@@ -46,6 +46,27 @@ def extract_content_text_only(url=hidden.url):
 
 """
 Parameters:
+    url - a url string representing valid API request
+
+Returns:
+    review_information - a list of tuples of the form (title, pub. date)
+            for each review
+"""
+def review_info(url=hidden.url):
+    resp = requests.get(url)
+    resp = resp.json()
+    review_information = list()
+    next_page_token = True
+    while next_page_token:
+        for post in resp.get('items', None):
+            review_information.append((post['title'], post['published']))
+        next_page_token = resp.get('nextPageToken', None)
+        if next_page_token:
+            resp = requests.get(f'{url}&pageToken={next_page_token}').json()
+    return review_information
+
+"""
+Parameters:
     num_files - number of .md files to generate (more files = smaller
                 files, which can be better for some md renderers); default 1
     space_between - number of blank lines between entries; default 4
