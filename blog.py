@@ -79,3 +79,67 @@ def generate_markdown_files(num_files=1, space_between=4, output_dir='./markdown
         file.write(text)
         file.close()
     return
+
+"""
+Parameters:
+    None
+
+Returns:
+    None
+
+Modifies:
+    After markdown files have been generated through generate_markdown_files(),
+    remove_links() writes new files which have removed links but preserved
+    the underlying text for titles, authors, and ratings.
+"""
+def remove_links():
+    files = os.listdir('Desktop')
+    files = [f for f in files if 'blog' in f]
+    text_list = list()
+    for file in files:
+        matches, titles = list(), list()
+        author_matches, authors = list(), list()
+        rating_matches, ratings = list(), list()
+        with open(f'./markdown_files/{file}', 'r') as f:
+            lines = f.read()
+            matches.extend(
+                re.findall('<a href="http://www.goodreads.com/book/show/[0-9]*">[0-9A-Za-z.!-:,&\' ]*</a>', lines))
+            matches.extend(
+                re.findall('<a href="https://www.goodreads.com/book/show/[0-9]*">[0-9A-Za-z.!-:,&\' ]*</a>', lines))
+            titles.extend(
+                re.findall('<a href="http://www.goodreads.com/book/show/[0-9]*">([0-9A-Za-z.!-:,&\' ]*)</a>', lines))
+            titles.extend(
+                re.findall('<a href="https://www.goodreads.com/book/show/[0-9]*">([0-9A-Za-z.!-:,&\' ]*)</a>', lines))
+            author_matches.extend(
+                re.findall('<a href="http://www.goodreads.com/author/show/[0-9]*">[0-9A-Za-z.!-:,&\' ]*</a>', lines))
+            author_matches.extend(
+                re.findall('<a href="https://www.goodreads.com/author/show/[0-9]*">[0-9A-Za-z.!-:,&\' ]*</a>', lines))
+            authors.extend(
+                re.findall('<a href="http://www.goodreads.com/author/show/[0-9]*">([0-9A-Za-z.!-:,&\' ]*)</a>', lines))
+            authors.extend(
+                re.findall('<a href="https://www.goodreads.com/author/show/[0-9]*">([0-9A-Za-z.!-:,&\' ]*)</a>', lines))
+            rating_matches.extend(
+                re.findall('<a href="http://www.goodreads.com/review/show/[0-9]*">[0-9A-Za-z.!-:,&\' ]*</a>', lines))
+            rating_matches.extend(
+                re.findall('<a href="https://www.goodreads.com/review/show/[0-9]*">[0-9A-Za-z.!-:,&\' ]*</a>', lines))
+            ratings.extend(
+                re.findall('<a href="http://www.goodreads.com/review/show/[0-9]*">([0-9A-Za-z.!-:,&\' ]*)</a>', lines))
+            ratings.extend(
+                re.findall('<a href="https://www.goodreads.com/review/show/[0-9]*">([0-9A-Za-z.!-:,&\' ]*)</a>', lines))
+        tm = list(zip(titles, matches))
+        am = list(zip(authors, author_matches))
+        rm = list(zip(ratings, rating_matches))
+        for title, pattern in tm:
+            lines = re.sub(pattern, title, lines)
+        for author, pattern in am:
+            lines = re.sub(pattern, author, lines)
+        for rat, pattern in rm:
+            lines = re.sub(pattern, rat, lines)
+        text_list.append(lines)
+    i = 1
+    for text in text_list:
+        file = open(f'Desktop/blog_posts{i}.md', 'w')
+        file.write(text)
+        file.close()
+        i += 1
+    return
