@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 import re
 import requests
 import nltk
-# nltk.download()
+# nltk.download() # can comment out after first run
 import textblob
 import os
 import altair as alt
@@ -41,3 +41,5 @@ Returns:
 def extract_content_text_only(url=hidden.url):
     content = extract_content()
     for i in range(len(content)):
+        content[i] = BeautifulSoup(content[i], 'html.parser').text
+    return content
