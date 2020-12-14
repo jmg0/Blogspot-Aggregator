@@ -6,7 +6,9 @@ def main():
     # print(blog.extract_content_text_only())
     # print(blog.generate_markdown_files(8))
     # blog.test_analysis()
-    print(blog.review_info())
+    # print(blog.review_info())
+    blog.test_analysis2()
+
 
 if __name__ == '__main__':
     main()

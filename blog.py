@@ -49,6 +49,19 @@ Parameters:
     url - a url string representing valid API request
 
 Returns:
+    content - a single string which is all posts concatenated
+"""
+def extract_content_single_text(url=hidden.url):
+    content = extract_content()
+    for i in range(len(content)):
+        content[i] = BeautifulSoup(content[i], 'html.parser').text
+    return ' '.join(content)
+
+"""
+Parameters:
+    url - a url string representing valid API request
+
+Returns:
     review_information - a list of tuples of the form (title, pub. date)
             for each review
 """
@@ -152,6 +165,26 @@ def remove_links():
         file.close()
         i += 1
     return
+
+"""
+Parameters:
+    content - a string of words
+
+Returns:
+    b - a dictionary of the form "word: frequency" sorted
+        in descending order by frequency
+"""
+def sorted_word_counts(content):
+    b = textblob.TextBlob(content)
+    b = b.word_counts
+    b = dict(sorted(b.items(), key=lambda x: x[1], reverse=True))
+    return b
+
+def test_analysis2():
+    content = extract_content_single_text()
+    b = textblob.TextBlob(content)
+    b = b.word_counts
+    print(dict(sorted(b.items(), key=lambda x: x[1], reverse=True)))
 
 def test_analysis():
     content = extract_content_text_only()
