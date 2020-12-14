@@ -102,30 +102,18 @@ def remove_links():
         rating_matches, ratings = list(), list()
         with open(f'./markdown_files/{file}', 'r') as f:
             lines = f.read()
-            matches.extend(
-                re.findall('<a href="http://www.goodreads.com/book/show/[0-9]*">[0-9A-Za-z.!-:,&\' ]*</a>', lines))
-            matches.extend(
-                re.findall('<a href="https://www.goodreads.com/book/show/[0-9]*">[0-9A-Za-z.!-:,&\' ]*</a>', lines))
-            titles.extend(
-                re.findall('<a href="http://www.goodreads.com/book/show/[0-9]*">([0-9A-Za-z.!-:,&\' ]*)</a>', lines))
-            titles.extend(
-                re.findall('<a href="https://www.goodreads.com/book/show/[0-9]*">([0-9A-Za-z.!-:,&\' ]*)</a>', lines))
-            author_matches.extend(
-                re.findall('<a href="http://www.goodreads.com/author/show/[0-9]*">[0-9A-Za-z.!-:,&\' ]*</a>', lines))
-            author_matches.extend(
-                re.findall('<a href="https://www.goodreads.com/author/show/[0-9]*">[0-9A-Za-z.!-:,&\' ]*</a>', lines))
-            authors.extend(
-                re.findall('<a href="http://www.goodreads.com/author/show/[0-9]*">([0-9A-Za-z.!-:,&\' ]*)</a>', lines))
-            authors.extend(
-                re.findall('<a href="https://www.goodreads.com/author/show/[0-9]*">([0-9A-Za-z.!-:,&\' ]*)</a>', lines))
-            rating_matches.extend(
-                re.findall('<a href="http://www.goodreads.com/review/show/[0-9]*">[0-9A-Za-z.!-:,&\' ]*</a>', lines))
-            rating_matches.extend(
-                re.findall('<a href="https://www.goodreads.com/review/show/[0-9]*">[0-9A-Za-z.!-:,&\' ]*</a>', lines))
-            ratings.extend(
-                re.findall('<a href="http://www.goodreads.com/review/show/[0-9]*">([0-9A-Za-z.!-:,&\' ]*)</a>', lines))
-            ratings.extend(
-                re.findall('<a href="https://www.goodreads.com/review/show/[0-9]*">([0-9A-Za-z.!-:,&\' ]*)</a>', lines))
+            matches.extend(re.findall('<a href="http://www.goodreads.com/book/show/[0-9]*">[0-9A-Za-z.!-:,&\' ]*</a>', lines))
+            matches.extend(re.findall('<a href="https://www.goodreads.com/book/show/[0-9]*">[0-9A-Za-z.!-:,&\' ]*</a>', lines))
+            titles.extend(re.findall('<a href="http://www.goodreads.com/book/show/[0-9]*">([0-9A-Za-z.!-:,&\' ]*)</a>', lines))
+            titles.extend(re.findall('<a href="https://www.goodreads.com/book/show/[0-9]*">([0-9A-Za-z.!-:,&\' ]*)</a>', lines))
+            author_matches.extend(re.findall('<a href="http://www.goodreads.com/author/show/[0-9]*">[0-9A-Za-z.!-:,&\' ]*</a>', lines))
+            author_matches.extend(re.findall('<a href="https://www.goodreads.com/author/show/[0-9]*">[0-9A-Za-z.!-:,&\' ]*</a>', lines))
+            authors.extend(re.findall('<a href="http://www.goodreads.com/author/show/[0-9]*">([0-9A-Za-z.!-:,&\' ]*)</a>', lines))
+            authors.extend(re.findall('<a href="https://www.goodreads.com/author/show/[0-9]*">([0-9A-Za-z.!-:,&\' ]*)</a>', lines))
+            rating_matches.extend(re.findall('<a href="http://www.goodreads.com/review/show/[0-9]*">[0-9A-Za-z.!-:,&\' ]*</a>', lines))
+            rating_matches.extend(re.findall('<a href="https://www.goodreads.com/review/show/[0-9]*">[0-9A-Za-z.!-:,&\' ]*</a>', lines))
+            ratings.extend(re.findall('<a href="http://www.goodreads.com/review/show/[0-9]*">([0-9A-Za-z.!-:,&\' ]*)</a>', lines))
+            ratings.extend(re.findall('<a href="https://www.goodreads.com/review/show/[0-9]*">([0-9A-Za-z.!-:,&\' ]*)</a>', lines))
         tm = list(zip(titles, matches))
         am = list(zip(authors, author_matches))
         rm = list(zip(ratings, rating_matches))
@@ -142,4 +130,35 @@ def remove_links():
         file.write(text)
         file.close()
         i += 1
+    return
+
+def test_analysis():
+    content = extract_content_text_only()
+    review_num, polarity, subjectivity = list(), list(), list()
+    i = 0
+    for entry in content:
+        b = textblob.TextBlob(entry)
+        review_num.append(i)
+        polarity.append(b.polarity)
+        subjectivity.append(b.subjectivity)
+        i += 1
+        print(b.sentiment)
+    b = textblob.TextBlob(content[0])
+    print('\n----------------\n')
+    print(b.correct())
+    print('\n----------------\n')
+    print(b.tags)
+    print('\n----------------\n')
+    print(b.noun_phrases)
+    print('\n----------------\n')
+    print(b.words)
+    print('\n----------------\n')
+    print(b.word_counts)
+    print('\n----------------\n')
+    print(b.sentiment)
+
+    plt.plot(review_num, polarity, color='C0', label='Polarity')
+    plt.plot(review_num, subjectivity, color='C1', label='Subjectivity')
+    plt.legend()
+    plt.show()
     return
