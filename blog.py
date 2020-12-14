@@ -4,13 +4,8 @@ from bs4 import BeautifulSoup
 import re
 import requests
 import nltk
-nltk.download()
+# nltk.download()
 import textblob
 import os
 import altair as alt
 
-def main():
-    print('Hello')
-
-if __name__ == '__main__':
-    main()
