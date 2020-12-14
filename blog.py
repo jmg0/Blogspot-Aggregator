@@ -43,3 +43,39 @@ def extract_content_text_only(url=hidden.url):
     for i in range(len(content)):
         content[i] = BeautifulSoup(content[i], 'html.parser').text
     return content
+
+"""
+Parameters:
+    num_files - number of .md files to generate (more files = smaller
+                files, which can be better for some md renderers); default 1
+    space_between - number of blank lines between entries; default 4
+    output_dir - directory for generated files to be placed; default
+                ./markdown_files in CWD, which will be generated if 
+                it doesn't already exist
+
+Returns:
+    None
+"""
+def generate_markdown_files(num_files=1, space_between=4, output_dir='./markdown_files/'):
+    if num_files < 1:
+        num_files = 1
+    content = extract_content()
+    num_posts = len(content)
+    increment = num_posts // num_files
+    joiner = "<br/>" * space_between
+    file_sizes = list()
+    i, j = 0, increment
+    while j <= num_posts:
+        file_sizes.append((i,j))
+        i = j
+        j += increment
+    for i,j in file_sizes:
+        if i / increment == num_files - 1:
+            text = joiner.join(content[i:])
+        else:
+            text = joiner.join(content[i:j])
+        text = text.strip()
+        file = open(f'./markdown_files/blog_posts{i}.md', 'w')
+        file.write(text)
+        file.close()
+    return
