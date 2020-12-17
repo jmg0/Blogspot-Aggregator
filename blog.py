@@ -187,7 +187,7 @@ def pos_counts():
     b = b.tags
     for tag in b:
         pos_count[tag[1]] = pos_count.get(tag[1], 0) + 1
-    return pos_count
+    return dict(sorted(pos_count.items(), key=lambda x: x[1], reverse=True))
 
 def test_analysis2():
     content = extract_content_single_text()

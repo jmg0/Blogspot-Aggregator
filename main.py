@@ -8,7 +8,7 @@ def main():
     # blog.test_analysis()
     # print(blog.review_info())
     # blog.test_analysis2()
-    blog.pos_counts()
+    print(blog.pos_counts())
 
 
 if __name__ == '__main__':
