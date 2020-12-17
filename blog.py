@@ -180,6 +180,15 @@ def sorted_word_counts(content):
     b = dict(sorted(b.items(), key=lambda x: x[1], reverse=True))
     return b
 
+def pos_counts():
+    content = extract_content_single_text()
+    pos_count = dict()
+    b = textblob.TextBlob(content)
+    b = b.tags
+    for tag in b:
+        pos_count[tag[1]] = pos_count.get(tag[1], 0) + 1
+    return pos_count
+
 def test_analysis2():
     content = extract_content_single_text()
     b = textblob.TextBlob(content)
